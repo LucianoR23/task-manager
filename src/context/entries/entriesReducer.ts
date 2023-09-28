@@ -1,7 +1,7 @@
 import { Entry } from "@/interfaces";
 import { EntriesState } from "../";
 
-type EntriesAction = | { type: '[Entry] Add-Entry', payload: Entry } | { type: '[Entry] Entry-Updated', payload: Entry } | { type: '[Entry] Refresh-Data', payload: Entry[] }
+type EntriesAction = | { type: '[Entry] Add-Entry', payload: Entry } | { type: '[Entry] Entry-Updated', payload: Entry } | { type: '[Entry] Refresh-Data', payload: Entry[] } | { type: '[Entry] Delete-Entry', payload: string }
 
 export const entriesReducer = ( state: EntriesState, action: EntriesAction ): EntriesState => {
     
@@ -19,6 +19,7 @@ export const entriesReducer = ( state: EntriesState, action: EntriesAction ): En
                     if( entry._id === action.payload._id ) {
                         entry.status = action.payload.status
                         entry.description = action.payload.description
+                        entry.createdAt = action.payload.createdAt
                     }
                     return entry
                 } )
@@ -28,6 +29,12 @@ export const entriesReducer = ( state: EntriesState, action: EntriesAction ): En
             return {
                 ...state,
                 entries: [ ...action.payload ]
+            }
+
+        case '[Entry] Delete-Entry':
+            return {
+                ...state,
+                entries: state.entries.filter( entry => entry._id !== action.payload )
             }
         
         default:

@@ -7,7 +7,7 @@ const Home = () => {
   return (
     <Layout title='Home - Task Manager'>
 
-      <Grid container spacing={ 2 }>
+      <Grid container spacing={ 2 } className='animate__animated animate__fadeInDown'>
 
         <Grid item xs={ 12 } sm={ 4 } >
           <Card sx={{ height: 'calc(100vh - 100px)' }}>

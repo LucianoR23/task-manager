@@ -6,6 +6,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { EntriesProvider, UIProvider } from '@/context';
 import { ThemeContext, darkTheme, lightTheme } from '@/themes';
 import '@/styles/globals.css'
+import 'animate.css';
 
 
 

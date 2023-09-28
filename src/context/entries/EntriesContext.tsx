@@ -6,6 +6,7 @@ export interface EntriesContextProps {
     entries: Entry[]
     addNewEntry: (description: string) => void
     updateEntry: (entry: Entry, showSnakbar?: boolean) => void
+    deleteEntry: (_id: string) => Promise<void>
 }
 
 

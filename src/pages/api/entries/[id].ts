@@ -19,9 +19,36 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<Data>)
         
         case 'GET':
             return getEntry( req, res )
+
+        case 'DELETE':
+            return deleteEntry( req, res )
             
         default:
             return res.status(400).json({ message: 'Method does not exist'})
+    }
+
+}
+
+const deleteEntry =async ( req: NextApiRequest, res: NextApiResponse<Data> ) => {
+    const { id } = req.query
+
+    await db.connect()
+
+    const entryToDelete = await Entry.findById( id )
+
+    if( !entryToDelete ){
+        await db.disconnect()
+        return res.status(400).json({ message: 'There is no entry with that ID'})
+    }
+
+    try {
+        await Entry.findByIdAndDelete( id )
+        await db.disconnect()
+        res.status(200).json({ message: "The task was successfully deleted" })
+    } catch (error: any) {
+        console.log(error)
+        await db.disconnect()
+        res.status(400).json({ message: error.errors.status.message })
     }
 
 }
@@ -38,10 +65,10 @@ const updateEntry = async( req: NextApiRequest, res: NextApiResponse<Data> ) => 
         return res.status(400).json({ message: 'There is no entry with that ID'})
     }
 
-    const { description = entryToUpdate.description, status = entryToUpdate.status } = req.body
+    const { description = entryToUpdate.description, status = entryToUpdate.status, createdAt = entryToUpdate.createdAt } = req.body
 
     try {
-        const updatedEntry = await Entry.findByIdAndUpdate( id, { description, status }, { runValidators: true, new: true } )
+        const updatedEntry = await Entry.findByIdAndUpdate( id, { description, status, createdAt }, { runValidators: true, new: true } )
         // entryToUpdate.description = description
         // entryToUpdate.status = status
         // await entryToUpdate.save()

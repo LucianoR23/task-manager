@@ -1,6 +1,6 @@
 {
   "name": "task-manager",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -13,6 +13,7 @@
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.14.11",
     "@mui/material": "^5.14.11",
+    "animate.css": "^4.1.1",
     "axios": "^1.5.1",
     "date-fns": "^2.30.0",
     "mongoose": "^7.5.3",

@@ -1,5 +1,6 @@
 import { ChangeEvent, useMemo, useState, FC, useContext } from 'react';
 import { GetServerSideProps } from 'next'
+import { useRouter } from 'next/router';
 import { Button, Card, CardActions, CardContent, CardHeader, FormControl, FormControlLabel, FormLabel, Grid, IconButton, Radio, RadioGroup, TextField, capitalize } from "@mui/material"
 import { DeleteForeverRounded, SaveRounded } from "@mui/icons-material"
 import { Layout } from "@/components"
@@ -15,8 +16,8 @@ interface Props {
 }
 
 export const EntryPage: FC<Props> = ({ entry }) => {
-    const { updateEntry } = useContext( EntriesContext )
-
+    const { updateEntry, deleteEntry } = useContext( EntriesContext )
+    const router = useRouter()
 
     const [inputValue, setInputValue] = useState( entry.description )
     const [status, setStatus] = useState<EntryStatus>( entry.status )
@@ -44,10 +45,15 @@ export const EntryPage: FC<Props> = ({ entry }) => {
         updateEntry( updatedEntry, true )
     }
 
+    const onDelete = () => {
+        deleteEntry( entry._id )
+        router.push('/')
+    }
+
     return (
         <Layout title={ inputValue.substring(0,15) + '...' }>
 
-            <Grid container justifyContent='center' sx={{ mt: 2 }}>
+            <Grid container justifyContent='center' sx={{ mt: 2 }} className='animate__animated animate__fadeInUp' >
 
                 <Grid item xs={ 12 } sm={ 8 } md={ 6 }>
                     <Card>
@@ -75,7 +81,7 @@ export const EntryPage: FC<Props> = ({ entry }) => {
 
             </Grid>
 
-            <IconButton size="large" sx={{ position: 'fixed', bottom: 30, right: 30, backgroundColor: 'error.dark' }}>
+            <IconButton onClick={ onDelete } size="large" sx={{ position: 'fixed', bottom: 30, right: 30, backgroundColor: 'error.dark' }}>
                 <DeleteForeverRounded />
             </IconButton>
 

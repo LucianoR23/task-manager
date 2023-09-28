@@ -32,10 +32,31 @@ export const EntriesProvider: FC<Props> = ({ children }) => {
 
     }
 
+    const deleteEntry = async( _id: string ) => {
+        
+        try {
+            await entriesApi.delete<Entry>(`/entries/${ _id }`)
+            dispatch({ type: '[Entry] Delete-Entry', payload: _id })
+
+            enqueueSnackbar('Task deleted', {
+                variant: 'success',
+                autoHideDuration: 1500,
+                anchorOrigin: {
+                    vertical: 'bottom',
+                    horizontal: 'left'
+                }
+            })
+
+        } catch (error) {
+            console.log({ error })
+        }
+
+    }
+
     const updateEntry = async( { _id, status, description }: Entry, showSnackbar = false ) => {
         try {
 
-            const { data } = await entriesApi.put<Entry>(`/entries/${ _id }`, { description, status })
+            const { data } = await entriesApi.put<Entry>(`/entries/${ _id }`, { description, status, createdAt: Date.now() })
             dispatch({ type: '[Entry] Entry-Updated', payload: data })
 
             if( showSnackbar ){
@@ -64,7 +85,7 @@ export const EntriesProvider: FC<Props> = ({ children }) => {
     
 
     return (
-        <EntriesContext.Provider value={{ ...state, addNewEntry, updateEntry }}>
+        <EntriesContext.Provider value={{ ...state, addNewEntry, updateEntry, deleteEntry }}>
             { children }
         </EntriesContext.Provider>
     )
